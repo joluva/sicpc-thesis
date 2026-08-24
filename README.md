@@ -77,4 +77,4 @@ Este proyecto utiliza exclusivamente cuentas de correo personales del autor (no 
 
 ## Autor
 
-Jorge — Tesis de Data Science
+Jorge — Práctica Profesionalizante Data Science, Instituto Teclab

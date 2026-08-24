@@ -1,0 +1,40 @@
+# Variables de entorno y credenciales
+.env
+*.env.local
+credentials/
+*.pem
+*.key
+
+# Datos sensibles / crudos (nunca versionar correos reales)
+data/raw/*
+!data/raw/.gitkeep
+
+# Datos procesados (evaluar caso a caso si se versiona una muestra anonimizada)
+data/processed/*.csv
+data/processed/*.parquet
+!data/processed/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Modelos entrenados (pesados — considerar Git LFS o almacenamiento externo)
+*.pkl
+*.pt
+*.bin
+models/checkpoints/
+
+# n8n (puede contener credenciales embebidas si no se exporta con cuidado)
+n8n-workflows/*.local.json
+
+# Docker
+*.log
+
+# Sistema operativo / editor
+.DS_Store
+.vscode/
+.idea/
