@@ -10,6 +10,11 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://${PAPERTRAIL_HOST}:${PAPERTRAIL_PORT}"
+        tag: "sicpc-mysql"
     volumes:
       - mysql_data:/var/lib/mysql
 
