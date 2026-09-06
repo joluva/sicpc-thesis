@@ -67,7 +67,7 @@ de Data Science.
 - El sistema no garantiza disponibilidad ni soporte fuera del período de
   desarrollo de la tesis.
 
-  ## Limitaciones conocidas de la anonimización (MVP)
+  ## 8.Limitaciones conocidas de la anonimización (MVP)
 
 El modelo de NER en español (es_core_news_lg) presenta imprecisiones esperables:
 - Direcciones compuestas (ej. "Av. Corrientes 1234") pueden anonimizarse
