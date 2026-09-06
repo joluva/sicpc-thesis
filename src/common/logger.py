@@ -1,3 +1,5 @@
+# Modulo para gestionar los log del sistema
+
 import logging
 import logging.handlers
 import os
