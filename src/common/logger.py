@@ -10,10 +10,10 @@ PAPERTRAIL_PORT = os.getenv("PAPERTRAIL_PORT")
 
 
 def get_logger(component_name: str) -> logging.Logger:
-    """
-    Logger centralizado para el proyecto SICPC.
-    Envía eventos a Papertrail (si está configurado) y también a consola.
-    """
+    
+    # Logger centralizado para el proyecto SICPC.
+    # Envía eventos a Papertrail (si está configurado) y también a consola.
+    
     logger = logging.getLogger(component_name)
     logger.setLevel(logging.INFO)
 
