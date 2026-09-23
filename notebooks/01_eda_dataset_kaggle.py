@@ -25,4 +25,16 @@ print(tabla_balance.round(1), "\n")
 # porcentuales de diferencia en alguna categoria), documentar el sesgo antes
 # de decidir si se puede usar el dataset completo sin balancear.
 
-print(df["language"].unique())
+# Filtrar solo español
+df_es = df[df["language"] == "es"].copy()
+
+# Mapeo de prioridad -> tu esquema de urgencia
+MAPEO_PRIORIDAD = {"low": "baja", "medium": "media", "high": "alta"}
+df_es["urgencia"] = df_es["priority"].map(MAPEO_PRIORIDAD)
+
+# Guardar para el notebook de modelado
+df_es[["subject", "body", "urgencia"]].to_csv(
+    "data/processed/kaggle_es_baseline.csv", index=False
+)
+print(f"Dataset en español listo: {len(df_es)} filas")
+print(df_es["urgencia"].value_counts())
