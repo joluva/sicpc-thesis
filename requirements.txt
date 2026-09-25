@@ -23,6 +23,7 @@ markdown-it-py==4.2.0
 MarkupSafe==3.0.3
 mdurl==0.1.2
 murmurhash==1.0.15
+mysql-connector-python==26.7.0
 numpy==2.2.6
 packaging==26.3
 pandas==2.3.3
@@ -42,6 +43,7 @@ regex==2026.9.3
 requests==2.34.2
 requests-file==3.0.1
 rich==15.0.0
+scikit-learn==1.7.2
 shellingham==1.5.4
 six==1.17.0
 smart_open==8.0.1
