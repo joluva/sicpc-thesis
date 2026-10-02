@@ -22,11 +22,16 @@ CANTIDAD_A_TRAER = 50  # ajustable
 def decode_str(s):
     if s is None:
         return ""
-    decoded, encoding = decode_header(s)[0]
+    try:
+        decoded, encoding = decode_header(s)[0]
+    except Exception:
+        return str(s)
     if isinstance(decoded, bytes):
-        return decoded.decode(encoding or "utf-8", errors="ignore")
+        try:
+            return decoded.decode(encoding or "utf-8", errors="ignore")
+        except (LookupError, UnicodeDecodeError):
+            return decoded.decode("utf-8", errors="ignore")
     return decoded
-
 
 def get_body(msg):
     if msg.is_multipart():
