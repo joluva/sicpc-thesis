@@ -39,11 +39,11 @@ DB_PASSWORD=...
 ## Constante de configuración
 
 ```python
-CANTIDAD_A_TRAER = 50
+CANTIDAD_A_TRAER = 150
 ```
 
 Controla cuántos correos (los más recientes) se procesan en cada ejecución.
-Se puede subir (ej. a 150-200) para traer más volumen de una sola vez.
+Se puede ajustar para procesar más o menos correos en cada ejecución.
 
 ## Funciones
 
@@ -104,12 +104,12 @@ sin nunca haber guardado su email real — solo el hash.
 Orquesta todo el proceso, en este orden:
 
 1. **Conexión IMAP**: se loguea en Gmail y selecciona la carpeta `inbox`.
-2. **Búsqueda de UIDs**: pide todos los identificadores de correo
-   (`mail.uid("search", None, "ALL")`) y se queda con los últimos
-   `CANTIDAD_A_TRAER`. Se usa **UID** (identificador estable del mensaje en
-   el servidor) y no el número de secuencia, porque el UID no cambia aunque
-   se reordene o elimine correo de la bandeja — es la clave que después
-   evita duplicados.
+2. **Búsqueda de UIDs**: busca los correos de la categoría Principal de Gmail
+   mediante el filtro IMAP `X-GM-RAW "category:primary"` y se queda con los
+   últimos `CANTIDAD_A_TRAER` identificadores. Se usa **UID** (identificador
+   estable del mensaje en el servidor) y no el número de secuencia, porque
+   el UID no cambia aunque se reordene o elimine correo de la bandeja —
+   es la clave que después evita duplicados.
 3. **Conexión a MySQL** y resolución de `cuenta_correo_id` (ver función de
    arriba).
 4. **Por cada correo** (procesados del más viejo al más nuevo entre los

@@ -16,7 +16,7 @@ load_dotenv()
 
 GMAIL_USER = os.getenv("GMAIL_USER")
 GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
-CANTIDAD_A_TRAER = 50  # ajustable
+CANTIDAD_A_TRAER = 150  # ajustable
 
 
 def decode_str(s):
@@ -76,8 +76,11 @@ def main():
     mail.login(GMAIL_USER, GMAIL_APP_PASSWORD)
     mail.select("inbox")
 
-    status, data = mail.uid("search", None, "ALL")
+    # Filtrar solo correos de la categoria "Principal" (excluye
+    # Social, Promociones, Notificaciones)
+    status, data = mail.uid("search", None, 'X-GM-RAW "category:primary"')
     uids = data[0].split()
+
     uids_a_traer = uids[-CANTIDAD_A_TRAER:] if len(uids) >= CANTIDAD_A_TRAER else uids
     print(f"Correos encontrados en la bandeja: {len(uids)}")
     print(f"Se van a procesar (ultimos): {len(uids_a_traer)}")
