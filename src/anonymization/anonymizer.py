@@ -38,13 +38,23 @@ OPERADORES = {
     "LOCATION": OperatorConfig("replace", {"new_value": "[DIRECCION]"}),
 }
 
+ALLOW_LIST = ["Saludos", "Saludos cordiales", "Gracias", "Buenos días",
+              "Buen día", "Estimado", "Estimados", "Atentamente",
+              "Cordialmente", "Hola"]
+
+UMBRAL = {"PERSON": 0.6, "LOCATION": 0.85,
+          "EMAIL_ADDRESS": 0.5, "PHONE_NUMBER": 0.5}
+
 
 def anonymize_text(texto: str) -> str:
-    """Recibe un texto (asunto o cuerpo) y devuelve la version anonimizada."""
     if not texto:
         return texto
 
-    resultados = _analyzer.analyze(text=texto, entities=ENTIDADES, language="es")
+    resultados = _analyzer.analyze(
+        text=texto, entities=ENTIDADES, language="es", allow_list=ALLOW_LIST
+    )
+    resultados = [r for r in resultados if r.score >= UMBRAL.get(r.entity_type, 0.6)]
+
     resultado = _anonymizer.anonymize(
         text=texto, analyzer_results=resultados, operators=OPERADORES
     )
