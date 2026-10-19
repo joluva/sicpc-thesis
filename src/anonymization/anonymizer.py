@@ -38,22 +38,32 @@ OPERADORES = {
     "LOCATION": OperatorConfig("replace", {"new_value": "[DIRECCION]"}),
 }
 
-ALLOW_LIST = ["Saludos", "Saludos cordiales", "Gracias", "Buenos días",
-              "Buen día", "Estimado", "Estimados", "Atentamente",
-              "Cordialmente", "Hola"]
+# Palabras que el modelo de NER suele marcar por error (saludos, cierres).
+# Se comparan en minusculas y sin signos de puntuacion en los bordes.
+PALABRAS_PERMITIDAS = {
+    "saludos", "saludos cordiales", "cordiales saludos", "gracias",
+    "muchas gracias", "buenos dias", "buen dia", "buenas tardes",
+    "buenas noches", "estimado", "estimados", "estimada", "atentamente",
+    "cordialmente", "hola", "slds", "abrazo", "abrazos",
+}
 
-UMBRAL = {"PERSON": 0.6, "LOCATION": 0.85,
-          "EMAIL_ADDRESS": 0.5, "PHONE_NUMBER": 0.5}
+
+def _es_permitida(fragmento: str) -> bool:
+    limpio = fragmento.strip().strip(".,;:!¡?¿()\"'").lower()
+    return limpio in PALABRAS_PERMITIDAS
 
 
 def anonymize_text(texto: str) -> str:
+    """Recibe un texto (asunto o cuerpo) y devuelve la version anonimizada."""
     if not texto:
         return texto
 
-    resultados = _analyzer.analyze(
-        text=texto, entities=ENTIDADES, language="es", allow_list=ALLOW_LIST
-    )
-    resultados = [r for r in resultados if r.score >= UMBRAL.get(r.entity_type, 0.6)]
+    resultados = _analyzer.analyze(text=texto, entities=ENTIDADES, language="es")
+
+    # Descartar falsos positivos conocidos antes de enmascarar
+    resultados = [
+        r for r in resultados if not _es_permitida(texto[r.start:r.end])
+    ]
 
     resultado = _anonymizer.anonymize(
         text=texto, analyzer_results=resultados, operators=OPERADORES
@@ -63,9 +73,8 @@ def anonymize_text(texto: str) -> str:
 
 def hash_identifier(identificador: str) -> str:
     """
-    Genera un hash irreversible de un identificador (ej: direccion de email
-    del remitente), usando un salt propio del proyecto para evitar ataques
-    de diccionario/rainbow table sobre direcciones comunes.
+    Hash irreversible (SHA-256 con salt propio del proyecto) de un
+    identificador, ej. la direccion de email del remitente.
     """
     if not identificador:
         return ""
@@ -75,9 +84,8 @@ def hash_identifier(identificador: str) -> str:
 
 def anonymize_email(remitente: str, asunto: str, cuerpo: str) -> dict:
     """
-    Punto de entrada principal: recibe los datos crudos de un correo y
-    devuelve el diccionario ya anonimizado, listo para pasar al modelo
-    de clasificacion o para insertar en la base de datos.
+    Punto de entrada principal: devuelve el diccionario ya anonimizado,
+    listo para el modelo de clasificacion o para insertar en la base.
     """
     return {
         "remitente_hash": hash_identifier(remitente),
@@ -96,4 +104,3 @@ if __name__ == "__main__":
     )
     for k, v in ejemplo.items():
         print(f"{k}: {v}")
-#EOF
