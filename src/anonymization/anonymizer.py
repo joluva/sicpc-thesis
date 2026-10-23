@@ -44,7 +44,10 @@ PALABRAS_PERMITIDAS = {
     "saludos", "saludos cordiales", "cordiales saludos", "gracias",
     "muchas gracias", "buenos dias", "buen dia", "buenas tardes",
     "buenas noches", "estimado", "estimados", "estimada", "atentamente",
-    "cordialmente", "hola", "slds", "abrazo", "abrazos",
+    "cordialmente", "hola", "slds", "abrazo", "abrazos", "tene en cuenta", "ten en cuenta",
+    "que tengas un buen dia", "que tengas un buen dia", "que tenga un buen dia",
+    "transferencia", "transferencias", "transferencias bancarias",
+    "ciudad",  "ciudades", "ciudades", "direccion", "direcciones",
 }
 
 
