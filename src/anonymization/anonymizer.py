@@ -6,7 +6,9 @@ llegue al modelo de clasificacion o a cualquier almacenamiento persistente.
 
 import hashlib
 import os
+import re
 from dotenv import load_dotenv
+from presidio_analyzer import Pattern, PatternRecognizer
 from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import NlpEngineProvider
 from presidio_anonymizer import AnonymizerEngine
@@ -28,14 +30,36 @@ _nlp_engine = _provider.create_engine()
 _analyzer = AnalyzerEngine(nlp_engine=_nlp_engine, supported_languages=["es"])
 _anonymizer = AnonymizerEngine()
 
+_patrones_patente = [
+    # Formato actual (desde 2016): AC 111 DF
+    Pattern("patente_mercosur", r"\b[A-Z]{2}\s?\d{3}\s?[A-Z]{2}\b", 0.6),
+    # Formato anterior: ABC 123 / ABC-123 / ABC123
+    Pattern("patente_anterior", r"\b[A-Z]{3}[\s-]?\d{3}\b", 0.5),
+    # Motos actuales: A 123 ABC
+    Pattern("patente_moto", r"\b[A-Z]\s?\d{3}\s?[A-Z]{3}\b", 0.5),
+]
+
+_analyzer.registry.add_recognizer(
+    PatternRecognizer(
+        supported_entity="PATENTE",
+        patterns=_patrones_patente,
+        supported_language="es",
+        # Sin IGNORECASE: solo mayusculas, para no confundir "mes 123" con una patente
+        global_regex_flags=re.DOTALL | re.MULTILINE,
+        name="PatenteArgentinaRecognizer",
+    )
+)
+
+
 # Entidades que nos interesa detectar, segun el documento de gobierno de datos
-ENTIDADES = ["PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "LOCATION"]
+ENTIDADES = ["PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "LOCATION", "PATENTE"]
 
 OPERADORES = {
     "PERSON": OperatorConfig("replace", {"new_value": "[PERSONA]"}),
     "EMAIL_ADDRESS": OperatorConfig("replace", {"new_value": "[EMAIL]"}),
     "PHONE_NUMBER": OperatorConfig("replace", {"new_value": "[TELEFONO]"}),
     "LOCATION": OperatorConfig("replace", {"new_value": "[DIRECCION]"}),
+    "PATENTE": OperatorConfig("replace", {"new_value": "[PATENTE]"}),
 }
 
 # Palabras que el modelo de NER suele marcar por error (saludos, cierres).
