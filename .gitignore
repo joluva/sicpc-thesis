@@ -27,6 +27,7 @@ venv/
 *.pt
 *.bin
 models/checkpoints/
+models/*pkl
 
 # n8n (puede contener credenciales embebidas si no se exporta con cuidado)
 n8n-workflows/*.local.json
