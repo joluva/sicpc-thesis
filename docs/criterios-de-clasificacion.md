@@ -82,4 +82,8 @@ en el corto plazo.
   de métricas de confianza) es independiente de estos criterios: un correo
   puede tener una urgencia clara para un humano pero baja confianza en el
   modelo, y viceversa.
-EOF
+
+## Correo autmatico
+- Alta: facturas o avisos con fecha de vencimiento de pago, y mensajes de una persona que exige respuesta en 24 a 48 horas.
+- Media: comprobantes, avisos de cuenta, recetas y confirmaciones que conviene leer pero no requieren acción inmediata, y mensajes de personas sin plazo.
+- Baja: boletines, ofertas, alertas de empleo, bienvenidas y promociones.
