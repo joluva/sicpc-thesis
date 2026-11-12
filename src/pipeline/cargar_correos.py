@@ -18,7 +18,7 @@ load_dotenv()
 
 GMAIL_USER = os.getenv("GMAIL_USER")
 GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
-CANTIDAD_A_TRAER = 150
+CANTIDAD_A_TRAER = 200
 
 
 # ---------- Utilidades de decodificacion (iguales a etiquetar_correos.py) ----------
