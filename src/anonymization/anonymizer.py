@@ -74,6 +74,20 @@ PALABRAS_PERMITIDAS = {
     "ciudad",  "ciudades", "ciudades", "direccion", "direcciones",
 }
 
+# Nombres propios que queremos enmascarar aunque el modelo de NER no los detecte.
+NOMBRES_PROPIOS = [
+    n.strip() for n in os.getenv("NOMBRES_PROPIOS", "").split(",") if n.strip()
+]
+
+if NOMBRES_PROPIOS:
+    _analyzer.registry.add_recognizer(
+        PatternRecognizer(
+            supported_entity="PERSON",
+            deny_list=NOMBRES_PROPIOS,
+            supported_language="es",
+            name="NombresPropiosRecognizer",
+        )
+    )
 
 def _es_permitida(fragmento: str) -> bool:
     limpio = fragmento.strip().strip(".,;:!¡?¿()\"'").lower()
