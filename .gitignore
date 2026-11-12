@@ -40,3 +40,4 @@ n8n-workflows/*.local.json
 .vscode/
 .idea/
 database/.env
+data/processed/*.tsv
