@@ -73,7 +73,7 @@ PALABRAS_PERMITIDAS = {
     "transferencia", "transferencias", "transferencias bancarias",
     "ciudad",  "ciudades", "ciudades", "direccion", "direcciones",
 }
-
+""""""
 # Nombres propios que queremos enmascarar aunque el modelo de NER no los detecte.
 NOMBRES_PROPIOS = [
     n.strip() for n in os.getenv("NOMBRES_PROPIOS", "").split(",") if n.strip()
@@ -88,7 +88,7 @@ if NOMBRES_PROPIOS:
             name="NombresPropiosRecognizer",
         )
     )
-
+""""""
 def _es_permitida(fragmento: str) -> bool:
     limpio = fragmento.strip().strip(".,;:!¡?¿()\"'").lower()
     return limpio in PALABRAS_PERMITIDAS
