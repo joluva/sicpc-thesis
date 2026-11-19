@@ -9,5 +9,10 @@ services:
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - GENERIC_TIMEZONE=America/Argentina/Buenos_Aires
       - TZ=America/Argentina/Buenos_Aires
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://${PAPERTRAIL_HOST}:${PAPERTRAIL_PORT}"
+        tag: "sicpc-n8n"
     volumes:
       - ~/.n8n:/home/node/.n8n
